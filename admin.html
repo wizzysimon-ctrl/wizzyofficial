@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Wizzy Admin</title><link rel="stylesheet" href="admin.css"></head>
+<body><main class="wrap">
+<div id="loginView" class="panel"><h1>WIZZY <span>ADMIN</span></h1><p>Login to publish on Wizzy Official.</p><form id="loginForm"><input id="email" type="email" placeholder="Admin email" required><input id="password" type="password" placeholder="Password" required><button>Login</button><p id="loginMsg"></p></form></div>
+<div id="appView" class="hidden">
+<header class="top"><div><h1>WIZZY ADMIN</h1><p id="who"></p></div><button id="logout" class="danger">Logout</button></header>
+<section class="panel"><h2>New post</h2><form id="postForm">
+<label>Type<select id="type"><option value="news">News / Post</option><option value="music">Music</option><option value="video">YouTube Video</option><option value="photo">Gallery Photo</option></select></label>
+<label>Title<input id="title" required placeholder="Post title"></label><label>Description<textarea id="body" rows="4" placeholder="Write something..."></textarea></label>
+<label id="mediaLabel">Media URL / YouTube URL<input id="mediaUrl" placeholder="https://..."></label>
+<label id="fileLabel" class="hidden">Upload file<input id="mediaFile" type="file" accept="image/*,audio/*"></label>
+<label class="check"><input id="published" type="checkbox" checked> Publish now</label>
+<button>Publish</button><p id="formMsg"></p></form></section>
+<section class="panel"><div class="row"><h2>Your posts</h2><button id="refresh">Refresh</button></div><div id="posts"></div></section>
+</div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="admin.js"></script></body></html>
