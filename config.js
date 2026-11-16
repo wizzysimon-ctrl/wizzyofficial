@@ -1,1 +1,4 @@
-sb_publishable_XGpk2gWcfE_MrwcZmhKxaA_3qxGa9gk
+window.WIZZY_CONFIG = {
+  SUPABASE_URL: "https://hywmvpdktjesdndpsjhm.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_XGpk2gWcfE_MrwcZmhKxaA_3qxGa9gk"
+};
