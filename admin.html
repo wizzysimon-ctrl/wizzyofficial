@@ -5,10 +5,12 @@
 <div id="appView" class="hidden">
 <header class="top"><div><h1>WIZZY ADMIN</h1><p id="who"></p></div><button id="logout" class="danger">Logout</button></header>
 <section class="panel"><h2>New post</h2><form id="postForm">
-<label>Type<select id="type"><option value="news">News / Post</option><option value="music">Music</option><option value="video">YouTube Video</option><option value="photo">Gallery Photo</option></select></label>
+<label>Type<select id="type"><option value="news">News / Post</option><option value="music">Music</option><option value="video">Video Upload</option><option value="photo">Gallery Photo</option></select></label>
 <label>Title<input id="title" required placeholder="Post title"></label><label>Description<textarea id="body" rows="4" placeholder="Write something..."></textarea></label>
 <label id="mediaLabel">Media URL / YouTube URL<input id="mediaUrl" placeholder="https://..."></label>
-<label id="fileLabel" class="hidden">Upload file<input id="mediaFile" type="file" accept="image/*,audio/*"></label>
+<label id="fileLabel" class="hidden">Upload file
+<input id="mediaFile" type="file" accept="image/*,audio/*,video/*">
+</label>
 <label class="check"><input id="published" type="checkbox" checked> Publish now</label>
 <button>Publish</button><p id="formMsg"></p></form></section>
 <section class="panel"><div class="row"><h2>Your posts</h2><button id="refresh">Refresh</button></div><div id="posts"></div></section>
