@@ -734,6 +734,47 @@ html {
     padding: 14px 28px;
   }
 }
+/* WIZZY OFFICIAL - CONTACT BUTTONS */
+#contact .contact-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 30px;
+}
+
+#contact .whatsapp {
+  display: inline-block;
+  padding: 15px 32px;
+  border-radius: 50px;
+  background: #171717;
+  color: #d5a84b;
+  border: 1px solid #d5a84b;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all .3s ease;
+}
+
+#contact .whatsapp:hover {
+  transform: translateY(-4px);
+  background: #d5a84b;
+  color: #080808;
+  box-shadow: 0 8px 25px rgba(213,168,75,.2);
+}
+
+@media(max-width:480px) {
+  #contact .contact-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #contact .contact-buttons .btn {
+    text-align: center;
+    width: 100%;
+  }
+}
+
 
 
 
