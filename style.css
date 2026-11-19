@@ -49,3 +49,96 @@ html {
   background: var(--gold);
   color: var(--black);
 }
+/* WIZZY OFFICIAL - HERO UPGRADE */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 90vh;
+  padding: 80px 9%;
+  gap: 50px;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 3;
+}
+
+.hero .eyebrow {
+  color: #d5a84b;
+  letter-spacing: 4px;
+  font-size: 13px;
+}
+
+.hero h1 {
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+.hero h1 span {
+  background: linear-gradient(90deg, #f5d98b, #d5a84b, #a87922);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero .tagline {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #c4c4c4;
+}
+
+.hero-photo img {
+  width: min(440px, 100%);
+  filter: drop-shadow(0 0 25px rgba(213,168,75,.12));
+  transition: transform .5s ease, filter .5s ease;
+}
+
+.hero-photo img:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 35px rgba(213,168,75,.25));
+}
+
+.hero .glow {
+  width: 380px;
+  height: 380px;
+  opacity: .25;
+}
+
+.hero .primary {
+  box-shadow: 0 5px 25px rgba(213,168,75,.15);
+}
+
+.hero .secondary:hover {
+  border-color: #d5a84b;
+  color: #d5a84b;
+}
+
+@media (max-width: 800px) {
+  .hero {
+    min-height: auto;
+    padding: 65px 6% 50px;
+    gap: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(43px, 12vw, 65px);
+    letter-spacing: -1px;
+  }
+
+  .hero .tagline {
+    font-size: 16px;
+  }
+
+  .hero-photo img {
+    width: min(340px, 95%);
+    max-height: 480px;
+  }
+
+  .hero .glow {
+    width: 250px;
+    height: 250px;
+  }
+}
+
