@@ -140,5 +140,45 @@ html {
     width: 250px;
     height: 250px;
   }
+}/* HERO TEXT SIZE FIX */
+
+.hero {
+  min-height: 78vh;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 35px;
+}
+
+.hero-text {
+  max-width: 750px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 5.2vw, 70px);
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+}
+
+.hero .buttons {
+  margin-top: 24px;
+}
+
+.hero-photo img {
+  max-height: 580px;
+}
+
+@media (max-width: 800px) {
+  .hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    padding: 55px 6% 35px;
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 11vw, 62px);
+  }
+
+  .hero-photo img {
+    max-height: 440px;
+  }
 }
 
