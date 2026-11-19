@@ -318,6 +318,78 @@ html {
     padding: 25px 22px;
   }
 }
+/* WIZZY OFFICIAL - MUSIC SECTION UPGRADE */
+
+#music {
+  position: relative;
+}
+
+#music h2 {
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 900;
+  margin-bottom: 25px;
+}
+
+#music .content-grid {
+  gap: 22px;
+  margin-top: 35px;
+}
+
+#music .item-card {
+  background: linear-gradient(145deg, #171717, #0b0b0b);
+  border: 1px solid rgba(213,168,75,.2);
+  border-radius: 18px;
+  padding: 25px;
+  transition: transform .3s ease, border-color .3s ease;
+}
+
+#music .item-card:hover {
+  transform: translateY(-6px);
+  border-color: #d5a84b;
+}
+
+#music .item-card h3 {
+  color: #f5f5f5;
+  font-size: 21px;
+}
+
+#music .item-card p {
+  color: #aaa;
+  line-height: 1.7;
+}
+
+#music .item-card audio {
+  width: 100%;
+  margin-top: 18px;
+  border-radius: 30px;
+}
+
+#music .placeholder {
+  background: #111;
+  border-color: rgba(213,168,75,.3);
+  border-radius: 18px;
+}
+
+#music .placeholder span {
+  color: #d5a84b;
+}
+
+@media (max-width: 800px) {
+  #music {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  #music .content-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  #music .item-card {
+    padding: 22px;
+  }
+}
+
 
 
 
