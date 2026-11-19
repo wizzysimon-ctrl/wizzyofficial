@@ -490,6 +490,96 @@ html {
     padding: 18px;
   }
 }
+/* WIZZY OFFICIAL - GALLERY UPGRADE */
+
+#gallery {
+  position: relative;
+  overflow: hidden;
+  padding: 85px 6%;
+  background: #080808;
+}
+
+#gallery .eyebrow {
+  color: #d5a84b;
+  letter-spacing: 4px;
+  font-size: 13px;
+}
+
+#gallery h2 {
+  font-size: clamp(38px, 5vw, 65px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: 40px;
+}
+
+#gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+#gallery .gallery-grid > *,
+#gallery .gallery-one {
+  overflow: hidden;
+  position: relative;
+  border-radius: 18px;
+  background: #121212;
+  border: 1px solid rgba(213,168,75,.25);
+  transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+#gallery .gallery-grid > *:hover,
+#gallery .gallery-one:hover {
+  transform: translateY(-6px);
+  border-color: #d5a84b;
+  box-shadow: 0 12px 30px rgba(213,168,75,.12);
+}
+
+#gallery img {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform .5s ease;
+}
+
+#gallery .gallery-grid > *:hover img,
+#gallery .gallery-one:hover img {
+  transform: scale(1.04);
+}
+
+@media(max-width:800px) {
+  #gallery {
+    padding: 60px 6%;
+  }
+
+  #gallery h2 {
+    font-size: clamp(35px, 9vw, 50px);
+    margin-bottom: 28px;
+  }
+
+  #gallery .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  #gallery img {
+    height: 230px;
+  }
+}
+
+@media(max-width:480px) {
+  #gallery .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #gallery img {
+    height: 320px;
+  }
+}
+
 
 
 
