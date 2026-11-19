@@ -229,5 +229,95 @@ html {
     border-bottom: 1px solid #d5a84b;
   }
 }
+/* WIZZY OFFICIAL - ABOUT SECTION UPGRADE */
+
+#about {
+  position: relative;
+  overflow: hidden;
+}
+
+#about .eyebrow {
+  color: #d5a84b;
+  letter-spacing: 4px;
+}
+
+#about h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.15;
+}
+
+#about .lead {
+  line-height: 1.9;
+  font-size: 18px;
+  color: #bdbdbd;
+  max-width: 750px;
+}
+
+#about .cards {
+  gap: 22px;
+  margin-top: 45px;
+}
+
+#about .cards article {
+  position: relative;
+  padding: 32px 26px;
+  background: linear-gradient(145deg, #151515, #0b0b0b);
+  border: 1px solid rgba(213,168,75,.18);
+  border-radius: 18px;
+  transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+#about .cards article:hover {
+  transform: translateY(-8px);
+  border-color: #d5a84b;
+  box-shadow: 0 12px 35px rgba(213,168,75,.10);
+}
+
+#about .cards article b {
+  display: inline-block;
+  color: #d5a84b;
+  font-size: 14px;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+#about .cards article h3 {
+  font-size: 23px;
+  color: #f5f5f5;
+  margin: 8px 0 12px;
+}
+
+#about .cards article p {
+  color: #999;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+@media (max-width: 800px) {
+  #about {
+    padding-top: 65px;
+    padding-bottom: 65px;
+  }
+
+  #about h2 {
+    font-size: clamp(34px, 9vw, 48px);
+  }
+
+  #about .lead {
+    font-size: 16px;
+  }
+
+  #about .cards {
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  #about .cards article {
+    padding: 25px 22px;
+  }
+}
+
 
 
