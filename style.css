@@ -181,4 +181,53 @@ html {
     max-height: 440px;
   }
 }
+/* WIZZY OFFICIAL - NAVIGATION UPGRADE */
+
+.nav {
+  background: rgba(8, 8, 8, .96);
+  border-bottom: 1px solid rgba(213, 168, 75, .25);
+}
+
+.brand {
+  color: #d5a84b;
+  font-size: 27px;
+  letter-spacing: 3px;
+}
+
+.brand span {
+  color: #fff;
+}
+
+.nav nav a {
+  color: #ddd;
+  font-weight: 600;
+  transition: color .3s ease;
+}
+
+.nav nav a:hover {
+  color: #d5a84b;
+}
+
+.menu {
+  color: #d5a84b;
+}
+
+@media (max-width: 800px) {
+  .nav {
+    padding: 16px 6%;
+  }
+
+  .brand {
+    font-size: 23px;
+  }
+
+  .nav nav a {
+    padding: 10px 0;
+  }
+
+  .nav nav.open {
+    border-bottom: 1px solid #d5a84b;
+  }
+}
+
 
