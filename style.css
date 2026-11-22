@@ -773,6 +773,78 @@ html {
     text-align: center;
     width: 100%;
   }
+}/* WIZZY OFFICIAL SHARE DESIGN */
+.share-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  align-items: center;
+}
+
+.share-tools button,
+.share-tools a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Gold Share Button */
+.share-native {
+  background: linear-gradient(135deg, #d4af37, #f5d76e);
+  color: #080808;
+  border: 1px solid #d4af37;
+}
+
+/* WhatsApp */
+.share-whatsapp {
+  background: #111;
+  color: #25d366;
+  border: 1px solid #25d366;
+}
+
+/* Facebook */
+.share-facebook {
+  background: #111;
+  color: #1877f2;
+  border: 1px solid #1877f2;
+}
+
+/* Copy Link */
+.share-copy {
+  background: #111;
+  color: #f5d76e;
+  border: 1px solid #c9a227;
+}
+
+/* Hover Effects */
+.share-tools button:hover,
+.share-tools a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 18px rgba(212, 175, 55, 0.22);
+  filter: brightness(1.15);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .share-tools {
+    gap: 8px;
+  }
+
+  .share-tools button,
+  .share-tools a {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
 }
 
 
