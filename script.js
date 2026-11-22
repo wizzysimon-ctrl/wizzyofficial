@@ -287,7 +287,7 @@ async function load() {
 
 // START
 load();
-
+setInterval(load, 120000);
 document.querySelector(".menu").addEventListener("click", () =>
   document.querySelector(".nav nav").classList.toggle("open")
 );
