@@ -845,6 +845,8 @@ html {
     padding: 9px 12px;
     font-size: 12px;
   }
+}.item-card[id] {
+  scroll-margin-top: 100px;
 }
 
 
