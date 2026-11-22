@@ -159,10 +159,16 @@ async function load() {
   let youtubeVideos = [];
 
   try {
-    const response = await fetch(
-      "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos"
-    );
-
+   const response = await fetch(
+  "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos",
+  {
+    method: "GET",
+    headers: {
+      "apikey": cfg.SUPABASE_ANON_KEY,
+      "Authorization": `Bearer ${cfg.SUPABASE_ANON_KEY}`
+    }
+  }
+);
     if (!response.ok) {
       throw new Error("Could not load YouTube videos");
     }
