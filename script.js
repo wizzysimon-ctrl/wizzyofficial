@@ -25,3 +25,36 @@ document.querySelector("#video-list").innerHTML=videos.length?videos.map(x=>{
 document.querySelector("#gallery-list").innerHTML=gallery.length?gallery.map(x=>`<article class="item-card"><img src="${esc(x.media_url)}" alt="${esc(x.title)}"><h3>${esc(x.title)}</h3></article>`).join(""):'<div class="gallery-one"><img src="wizzy-photo.png" alt="Wizzy Official portrait"></div>';
 document.querySelector("#news-list").innerHTML=news.length?news.map(x=>`<article class="item-card"><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p></article>`).join(""):'<div class="item-card"><h3>No news yet</h3><p>New updates will appear here.</p></div>'}
 load();document.querySelector(".menu").addEventListener("click",()=>document.querySelector(".nav nav").classList.toggle("open"));
+function shareContent(title, url, text) {
+  const shareUrl = window.location.href.split("#")[0] + url;
+  const message = `${title} - ${text} ${shareUrl}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: shareUrl
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(message).then(() => {
+      alert("Link copied! You can now share it with your friends.");
+    });
+  }
+}
+
+function addShareButton(title, text) {
+  const shareText = encodeURIComponent(`${title} - ${text}`);
+  const pageUrl = encodeURIComponent(window.location.href);
+
+  return `
+    <div class="share-buttons">
+      <button onclick="navigator.share ? navigator.share({title: '${title.replace(/'/g, "\\'")}', text: '${text.replace(/'/g, "\\'")}', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)">
+        📤 Share
+      </button>
+      <a href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank">WhatsApp</a>
+      <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>alert('Link copied!'))">
+        🔗 Copy Link
+      </button>
+    </div>
+  `;
+}
