@@ -140,45 +140,67 @@ async function load() {
   const gallery = data.filter(x => x.type === "photo");
   const news = data.filter(x => x.type === "news");
 
-  // MUSIC
-  document.querySelector("#music-list").innerHTML = music.length
-    ? music.map(x => `
-      <article class="item-card" id="music-${slug(x.title)}">
-        <h3>${esc(x.title)}</h3>
-        <p>${esc(x.body)}</p>
-        ${x.media_url
-          ? `<audio controls preload="metadata" src="${esc(x.media_url)}"></audio>`
-          : ""}
-        ${shareButtons(x, "music")}
-      </article>
-    `).join("")
-    : '<div class="item-card"><h3>No music yet</h3><p>Wizzy songs will appear here.</p></div>';
-
  
-  // VIDEOS FROM SUPABASE AND YOUTUBE
+  // LOAD YOUTUBE MUSIC AND VIDEOS
+  let youtubeMusic = [];
   let youtubeVideos = [];
 
   try {
-   const response = await fetch(
-  "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos",
-  {
-    method: "GET",
-    headers: {
-      "apikey": cfg.SUPABASE_ANON_KEY,
-      "Authorization": `Bearer ${cfg.SUPABASE_ANON_KEY}`
-    }
-  }
-);
+    const response = await fetch(
+      "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos",
+      {
+        method: "GET",
+        headers: {
+          "apikey": cfg.SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${cfg.SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+
     if (!response.ok) {
-      throw new Error("Could not load YouTube videos");
+      throw new Error("Could not load YouTube content");
     }
 
     const result = await response.json();
+    youtubeMusic = result.music || [];
     youtubeVideos = result.videos || [];
   } catch (error) {
     console.error("YouTube loading error:", error);
   }
 
+  // MUSIC FROM ADMIN DASHBOARD
+  const manualMusicHTML = music.map(x => `
+    <article class="item-card" id="music-${slug(x.title)}">
+      <h3>${esc(x.title)}</h3>
+      <p>${esc(x.body)}</p>
+      ${x.media_url
+        ? `<audio controls preload="metadata" src="${esc(x.media_url)}"></audio>`
+        : ""}
+      ${shareButtons(x, "music")}
+    </article>
+  `);
+
+  // MUSIC FROM YOUTUBE
+  const youtubeMusicHTML = youtubeMusic.map(x => `
+    <article class="item-card" id="music-${slug(x.title)}">
+      <h3>${esc(x.title)}</h3>
+      <p>${esc(x.description)}</p>
+      <iframe width="100%" height="240"
+        src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
+        title="${esc(x.title)}"
+        allowfullscreen loading="lazy">
+      </iframe>
+      ${shareButtons(x, "music")}
+    </article>
+  `);
+
+  const allMusicHTML = [...manualMusicHTML, ...youtubeMusicHTML];
+
+  document.querySelector("#music-list").innerHTML = allMusicHTML.length
+    ? allMusicHTML.join("")
+    : '<div class="item-card"><h3>No music yet</h3><p>Wizzy songs will appear here.</p></div>';
+
+  // VIDEOS FROM ADMIN DASHBOARD
   const manualVideoHTML = videos.map(x => {
     let u = x.media_url || "";
     let id = (u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/) || [])[1];
@@ -199,17 +221,15 @@ async function load() {
     `;
   });
 
+  // VIDEOS FROM YOUTUBE
   const youtubeHTML = youtubeVideos.map(x => `
     <article class="item-card" id="video-${slug(x.title)}">
       <h3>${esc(x.title)}</h3>
       <p>${esc(x.description)}</p>
-      <iframe
-        width="100%"
-        height="240"
+      <iframe width="100%" height="240"
         src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
         title="${esc(x.title)}"
-        allowfullscreen
-        loading="lazy">
+        allowfullscreen loading="lazy">
       </iframe>
       <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
         Watch on YouTube
@@ -222,7 +242,8 @@ async function load() {
 
   document.querySelector("#video-list").innerHTML = allVideoHTML.length
     ? allVideoHTML.join("")
-    : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from the Admin Dashboard or YouTube.</p></div>';
+    : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from Admin Dashboard or YouTube.</p></div>';
+
 
   // GALLERY
   document.querySelector("#gallery-list").innerHTML = gallery.length
