@@ -154,28 +154,69 @@ async function load() {
     `).join("")
     : '<div class="item-card"><h3>No music yet</h3><p>Wizzy songs will appear here.</p></div>';
 
-  // VIDEOS
-  document.querySelector("#video-list").innerHTML = videos.length
-    ? videos.map(x => {
-      let u = x.media_url || "";
-      let id = (u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/) || [])[1];
+ 
+  // VIDEOS FROM SUPABASE AND YOUTUBE
+  let youtubeVideos = [];
 
-      let player = id
-        ? `<iframe width="100%" height="240" src="https://www.youtube.com/embed/${id}" title="${esc(x.title)}" allowfullscreen></iframe>`
-        : u
-          ? `<video controls playsinline preload="metadata" src="${esc(u)}"></video>`
-          : "";
+  try {
+    const response = await fetch(
+      "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos"
+    );
 
-      return `
-        <article class="item-card" id="video-${slug(x.title)}">
-          <h3>${esc(x.title)}</h3>
-          <p>${esc(x.body)}</p>
-          ${player}
-          ${shareButtons(x, "video")}
-        </article>
-      `;
-    }).join("")
-    : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from the Admin Dashboard.</p></div>';
+    if (!response.ok) {
+      throw new Error("Could not load YouTube videos");
+    }
+
+    const result = await response.json();
+    youtubeVideos = result.videos || [];
+  } catch (error) {
+    console.error("YouTube loading error:", error);
+  }
+
+  const manualVideoHTML = videos.map(x => {
+    let u = x.media_url || "";
+    let id = (u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/) || [])[1];
+
+    let player = id
+      ? `<iframe width="100%" height="240" src="https://www.youtube.com/embed/${id}" title="${esc(x.title)}" allowfullscreen></iframe>`
+      : u
+        ? `<video controls playsinline preload="metadata" src="${esc(u)}"></video>`
+        : "";
+
+    return `
+      <article class="item-card" id="video-${slug(x.title)}">
+        <h3>${esc(x.title)}</h3>
+        <p>${esc(x.body)}</p>
+        ${player}
+        ${shareButtons(x, "video")}
+      </article>
+    `;
+  });
+
+  const youtubeHTML = youtubeVideos.map(x => `
+    <article class="item-card" id="video-${slug(x.title)}">
+      <h3>${esc(x.title)}</h3>
+      <p>${esc(x.description)}</p>
+      <iframe
+        width="100%"
+        height="240"
+        src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
+        title="${esc(x.title)}"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+      <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
+        Watch on YouTube
+      </a>
+      ${shareButtons(x, "video")}
+    </article>
+  `);
+
+  const allVideoHTML = [...manualVideoHTML, ...youtubeHTML];
+
+  document.querySelector("#video-list").innerHTML = allVideoHTML.length
+    ? allVideoHTML.join("")
+    : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from the Admin Dashboard or YouTube.</p></div>';
 
   // GALLERY
   document.querySelector("#gallery-list").innerHTML = gallery.length
