@@ -199,7 +199,21 @@ async function load() {
     `).join("")
     : '<div class="item-card"><h3>No news yet</h3><p>New updates will appear here.</p></div>';
 }
+  : '<div class="item-card"><h3>No news yet</h3><p>New updates will appear here.</p></div>';// OPEN THE SHARED CONTENT AFTER SUPABASE LOADS
+if (window.location.hash) {
+  requestAnimationFrame(() => {
+    const target = document.getElementById(
+      decodeURIComponent(window.location.hash.substring(1))
+    );
 
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  });
+}
 // START
 load();
 
