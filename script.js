@@ -1,6 +1,8 @@
 const cfg = window.WIZZY_CONFIG || {};
 let sb = null;
-
+let manualMusicData = [];
+let manualVideoData = [];
+let youtubeRefreshInProgress = false;
 if (
   window.supabase &&
   cfg.SUPABASE_URL &&
@@ -115,7 +117,103 @@ function fallback() {
   document.querySelector("#news-list").innerHTML =
     '<div class="item-card"><h3>No news yet</h3><p>New updates will appear here.</p></div>';
 }
+// REFRESH YOUTUBE ONLY
+async function refreshYouTube() {
+  if (youtubeRefreshInProgress) return;
 
+  youtubeRefreshInProgress = true;
+
+  try {
+    const response = await fetch(
+      "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos",
+      {
+        method: "GET",
+        headers: {
+          "apikey": cfg.SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${cfg.SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Could not refresh YouTube content");
+    }
+
+    const result = await response.json();
+
+    const youtubeMusic = result.music || [];
+    const youtubeVideos = result.videos || [];
+
+    const musicHTML = [
+      ...manualMusicData.map(x => `
+        <article class="item-card" id="music-${slug(x.title)}">
+          <h3>${esc(x.title)}</h3>
+          <p>${esc(x.body)}</p>
+          ${x.media_url ? `<audio controls preload="metadata" src="${esc(x.media_url)}"></audio>` : ""}
+          ${shareButtons(x, "music")}
+        </article>
+      `),
+      ...youtubeMusic.map(x => `
+        <article class="item-card" id="music-${slug(x.title)}">
+          <h3>${esc(x.title)}</h3>
+          <p>${esc(x.description)}</p>
+          <iframe width="100%" height="240"
+            src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
+            title="${esc(x.title)}" allowfullscreen loading="lazy">
+          </iframe>
+          ${shareButtons(x, "music")}
+        </article>
+      `)
+    ];
+
+    document.querySelector("#music-list").innerHTML = musicHTML.length
+      ? musicHTML.join("")
+      : '<div class="item-card"><h3>No music yet</h3><p>Wizzy songs will appear here.</p></div>';
+
+    const videoHTML = [
+      ...manualVideoData.map(x => {
+        const u = x.media_url || "";
+        const id = (u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/) || [])[1];
+
+        const player = id
+          ? `<iframe width="100%" height="240" src="https://www.youtube.com/embed/${id}" title="${esc(x.title)}" allowfullscreen></iframe>`
+          : u ? `<video controls playsinline preload="metadata" src="${esc(u)}"></video>` : "";
+
+        return `
+          <article class="item-card" id="video-${slug(x.title)}">
+            <h3>${esc(x.title)}</h3>
+            <p>${esc(x.body)}</p>
+            ${player}
+            ${shareButtons(x, "video")}
+          </article>
+        `;
+      }),
+      ...youtubeVideos.map(x => `
+        <article class="item-card" id="video-${slug(x.title)}">
+          <h3>${esc(x.title)}</h3>
+          <p>${esc(x.description)}</p>
+          <iframe width="100%" height="240"
+            src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
+            title="${esc(x.title)}" allowfullscreen loading="lazy">
+          </iframe>
+          <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
+            Watch on YouTube
+          </a>
+          ${shareButtons(x, "video")}
+        </article>
+      `)
+    ];
+
+    document.querySelector("#video-list").innerHTML = videoHTML.length
+      ? videoHTML.join("")
+      : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from Admin Dashboard or YouTube.</p></div>';
+
+  } catch (error) {
+    console.error("YouTube refresh error:", error);
+  } finally {
+    youtubeRefreshInProgress = false;
+  }
+}
 // LOAD CONTENT
 async function load() {
   if (!sb) {
@@ -141,110 +239,12 @@ async function load() {
   const news = data.filter(x => x.type === "news");
 
  
+    // SAVE ADMIN DASHBOARD CONTENT
+  manualMusicData = music;
+  manualVideoData = videos;
+
   // LOAD YOUTUBE MUSIC AND VIDEOS
-  let youtubeMusic = [];
-  let youtubeVideos = [];
-
-  try {
-    const response = await fetch(
-      "https://hywmvpdktjesdndpsjhm.supabase.co/functions/v1/youtube-videos",
-      {
-        method: "GET",
-        headers: {
-          "apikey": cfg.SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${cfg.SUPABASE_ANON_KEY}`
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Could not load YouTube content");
-    }
-
-    const result = await response.json();
-    youtubeMusic = result.music || [];
-    youtubeVideos = result.videos || [];
-  } catch (error) {
-    console.error("YouTube loading error:", error);
-  }
-
-  // MUSIC FROM ADMIN DASHBOARD
-  const manualMusicHTML = music.map(x => `
-    <article class="item-card" id="music-${slug(x.title)}">
-      <h3>${esc(x.title)}</h3>
-      <p>${esc(x.body)}</p>
-      ${x.media_url
-        ? `<audio controls preload="metadata" src="${esc(x.media_url)}"></audio>`
-        : ""}
-      ${shareButtons(x, "music")}
-    </article>
-  `);
-
-  // MUSIC FROM YOUTUBE
-  const youtubeMusicHTML = youtubeMusic.map(x => `
-    <article class="item-card" id="music-${slug(x.title)}">
-      <h3>${esc(x.title)}</h3>
-      <p>${esc(x.description)}</p>
-      <iframe width="100%" height="240"
-        src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
-        title="${esc(x.title)}"
-        allowfullscreen loading="lazy">
-      </iframe>
-      ${shareButtons(x, "music")}
-    </article>
-  `);
-
-  const allMusicHTML = [...manualMusicHTML, ...youtubeMusicHTML];
-
-  document.querySelector("#music-list").innerHTML = allMusicHTML.length
-    ? allMusicHTML.join("")
-    : '<div class="item-card"><h3>No music yet</h3><p>Wizzy songs will appear here.</p></div>';
-
-  // VIDEOS FROM ADMIN DASHBOARD
-  const manualVideoHTML = videos.map(x => {
-    let u = x.media_url || "";
-    let id = (u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^?&/]+)/) || [])[1];
-
-    let player = id
-      ? `<iframe width="100%" height="240" src="https://www.youtube.com/embed/${id}" title="${esc(x.title)}" allowfullscreen></iframe>`
-      : u
-        ? `<video controls playsinline preload="metadata" src="${esc(u)}"></video>`
-        : "";
-
-    return `
-      <article class="item-card" id="video-${slug(x.title)}">
-        <h3>${esc(x.title)}</h3>
-        <p>${esc(x.body)}</p>
-        ${player}
-        ${shareButtons(x, "video")}
-      </article>
-    `;
-  });
-
-  // VIDEOS FROM YOUTUBE
-  const youtubeHTML = youtubeVideos.map(x => `
-    <article class="item-card" id="video-${slug(x.title)}">
-      <h3>${esc(x.title)}</h3>
-      <p>${esc(x.description)}</p>
-      <iframe width="100%" height="240"
-        src="https://www.youtube.com/embed/${encodeURIComponent(x.videoId)}"
-        title="${esc(x.title)}"
-        allowfullscreen loading="lazy">
-      </iframe>
-      <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
-        Watch on YouTube
-      </a>
-      ${shareButtons(x, "video")}
-    </article>
-  `);
-
-  const allVideoHTML = [...manualVideoHTML, ...youtubeHTML];
-
-  document.querySelector("#video-list").innerHTML = allVideoHTML.length
-    ? allVideoHTML.join("")
-    : '<div class="item-card"><h3>No videos yet</h3><p>Add a video from Admin Dashboard or YouTube.</p></div>';
-
-
+  await refreshYouTube();
   // GALLERY
   document.querySelector("#gallery-list").innerHTML = gallery.length
     ? gallery.map(x => `
@@ -287,7 +287,7 @@ async function load() {
 
 // START
 load();
-setInterval(load, 120000);
+setInterval(refreshYouTube, 120000);
 document.querySelector(".menu").addEventListener("click", () =>
   document.querySelector(".nav nav").classList.toggle("open")
 );
